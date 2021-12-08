@@ -1,50 +1,46 @@
 package com.rasmoo.curriculumgrid.controller;
 
-import java.util.List;
-
+import com.rasmoo.curriculumgrid.dto.MatterDTO;
+import com.rasmoo.curriculumgrid.mapper.MatterMapper;
+import com.rasmoo.curriculumgrid.service.MatterService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.rasmoo.curriculumgrid.entity.Matter;
-import com.rasmoo.curriculumgrid.repository.MatterRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/matters")
 public class MatterController {
-	
-	private final MatterRepository repository;
+	private final MatterService service;
+
+	private final MatterMapper mapper;
 
 	@PostMapping
-	public ResponseEntity<String> save() {
-		return ResponseEntity.status(HttpStatus.OK).body("OLA MUNDO REST");
+	public ResponseEntity<MatterDTO> save(@RequestBody MatterDTO dto) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(service.save(mapper.map(dto))));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<String> update() {
-		return ResponseEntity.status(HttpStatus.OK).body("OLA MUNDO REST");
+	public ResponseEntity<MatterDTO> update(@PathVariable Long id, @RequestBody MatterDTO dto) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(service.update(id, mapper.map(dto))));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete() {
-		return ResponseEntity.status(HttpStatus.OK).body("OLA MUNDO REST");
+	public ResponseEntity<String> delete(@PathVariable Long id) {
+		service.delete(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<MatterDTO> findById(@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.OK).body(mapper.map(service.findById(id)));
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Matter>> list() {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<String> findById() {
-		return ResponseEntity.status(HttpStatus.OK).body("OLA MUNDO REST");
+	public ResponseEntity<List<MatterDTO>> list() {
+		return ResponseEntity.status(HttpStatus.OK).body(mapper.map(service.findAll()));
 	}
 }
