@@ -1,7 +1,9 @@
 package com.rasmoo.curriculumgrid.controller;
 
 import com.rasmoo.curriculumgrid.dto.MatterDTO;
+import com.rasmoo.curriculumgrid.entity.Matter;
 import com.rasmoo.curriculumgrid.mapper.MatterMapper;
+import com.rasmoo.curriculumgrid.service.CrudService;
 import com.rasmoo.curriculumgrid.service.MatterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,8 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/matters")
 public class MatterController {
-	private final MatterService service;
-
+	private final CrudService<Matter, Long> service;
 	private final MatterMapper mapper;
 
 	@PostMapping

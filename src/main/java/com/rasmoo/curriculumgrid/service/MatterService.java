@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class MatterService {
+public class MatterService implements CrudService<Matter, Long>{
     private final MatterRepository repository;
 
     public Matter save(final Matter entity){
