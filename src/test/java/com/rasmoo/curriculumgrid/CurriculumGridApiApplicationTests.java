@@ -9,5 +9,4 @@ class CurriculumGridApiApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

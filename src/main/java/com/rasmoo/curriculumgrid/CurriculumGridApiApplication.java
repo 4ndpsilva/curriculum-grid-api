@@ -9,5 +9,4 @@ public class CurriculumGridApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CurriculumGridApiApplication.class, args);
 	}
-
 }
