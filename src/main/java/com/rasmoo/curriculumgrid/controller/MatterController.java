@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,12 +27,12 @@ public class MatterController {
 	private final MatterMapper mapper;
 
 	@PostMapping
-	public ResponseEntity<MatterDTO> save(@RequestBody MatterDTO dto) {
+	public ResponseEntity<MatterDTO> save(@RequestBody @Valid MatterDTO dto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(service.save(mapper.map(dto))));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<MatterDTO> update(@PathVariable Long id, @RequestBody MatterDTO dto) {
+	public ResponseEntity<MatterDTO> update(@PathVariable Long id, @RequestBody @Valid MatterDTO dto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(service.update(id, mapper.map(dto))));
 	}
 

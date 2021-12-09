@@ -1,11 +1,13 @@
 package com.rasmoo.curriculumgrid.exception;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BusinessException extends RuntimeException{
     private String codeMessage;
-    private Object args;
+    private Object[] args;
 
     public BusinessException(final String codeMessage){
         super(codeMessage);

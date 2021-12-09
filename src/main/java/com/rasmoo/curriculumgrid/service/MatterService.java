@@ -2,6 +2,7 @@ package com.rasmoo.curriculumgrid.service;
 
 import com.rasmoo.curriculumgrid.entity.Matter;
 import com.rasmoo.curriculumgrid.exception.BusinessException;
+import com.rasmoo.curriculumgrid.exception.ResourceNotFoundException;
 import com.rasmoo.curriculumgrid.repository.MatterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class MatterService implements CrudService<Matter, Long>{
             return opMatter.get();
         }
 
-        throw new BusinessException("API-001");
+        throw new ResourceNotFoundException("API-001");
     }
 
     public List<Matter> findAll(){
@@ -39,7 +40,7 @@ public class MatterService implements CrudService<Matter, Long>{
 
     public void delete(final Long id){
         if(!repository.existsById(id)){
-            throw new BusinessException("API-001");
+            throw new ResourceNotFoundException("API-001");
         }
 
         repository.deleteById(id);

@@ -1,7 +1,6 @@
 package com.rasmoo.curriculumgrid.exception;
 
 import com.rasmoo.curriculumgrid.dto.ErrorResponseDTO;
-import com.rasmoo.curriculumgrid.dto.ErrorResponseDTO.ErrorResponseDTOBuilder;
 import com.rasmoo.curriculumgrid.dto.ValidationErrorDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -20,24 +19,26 @@ import java.util.List;
 public class ResponseMessageCreator{
     private final MessageSource messageSource;
 
-    public ResponseEntity<Object> error(final String codeMessage, final HttpStatus httpStatus) {
-        final String message = messageSource.getMessage(codeMessage, null, LocaleContextHolder.getLocale());
-        final List<ErrorResponseDTO> errors = List.of(buildErrorResponse(codeMessage, message, httpStatus));
+    public ResponseEntity<List<ErrorResponseDTO>> error(final String codeMessage, final HttpStatus httpStatus) {
+        final List<ErrorResponseDTO> errors = List.of(buildErrorResponse(codeMessage, httpStatus));
         return ResponseEntity.status(httpStatus).body(errors);
     }
 
-    public ErrorResponseDTO getErrors(final BindingResult bindingResult) {
+    public List<ErrorResponseDTO> getErrors(final BindingResult bindingResult) {
+        final ErrorResponseDTO error = buildErrorResponse("API-003", HttpStatus.BAD_REQUEST);
+
         final List<ValidationErrorDTO> errors = new ArrayList<>();
         bindingResult.getFieldErrors().forEach(f -> errors.add(new ValidationErrorDTO(f.getField(), f.getDefaultMessage())));
-        return ErrorResponseDTO.builder().validationErrors(errors).build();
+        error.setValidationErrors(errors);
+        return List.of(error);
     }
 
-    private ErrorResponseDTO buildErrorResponse(final String codeMessage, final String message, final HttpStatus httpStatus) {
-        ErrorResponseDTOBuilder error = ErrorResponseDTO.builder();
-        error.code(codeMessage);
-        error.message(message);
-        error.statusCode(httpStatus.value());
-        error.timestamp(LocalDateTime.now());
-        return error.build();
+    private ErrorResponseDTO buildErrorResponse(final String codeMessage, final HttpStatus httpStatus) {
+        ErrorResponseDTO error = new ErrorResponseDTO();
+        error.setCode(codeMessage);
+        error.setMessage(messageSource.getMessage(codeMessage, null, LocaleContextHolder.getLocale()));
+        error.setStatusCode(httpStatus.value());
+        error.setTimestamp(LocalDateTime.now());
+        return error;
     }
 }
