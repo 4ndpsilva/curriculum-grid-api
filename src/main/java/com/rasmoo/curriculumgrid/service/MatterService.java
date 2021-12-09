@@ -1,11 +1,13 @@
 package com.rasmoo.curriculumgrid.service;
 
 import com.rasmoo.curriculumgrid.entity.Matter;
+import com.rasmoo.curriculumgrid.exception.BusinessException;
 import com.rasmoo.curriculumgrid.repository.MatterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,8 +24,13 @@ public class MatterService implements CrudService<Matter, Long>{
     }
 
     public Matter findById(final Long id){
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Matéria não encontrada"));
+        Optional<Matter> opMatter = repository.findById(id);
+
+        if(opMatter.isPresent()){
+            return opMatter.get();
+        }
+
+        throw new BusinessException("API-001");
     }
 
     public List<Matter> findAll(){
@@ -31,6 +38,10 @@ public class MatterService implements CrudService<Matter, Long>{
     }
 
     public void delete(final Long id){
+        if(!repository.existsById(id)){
+            throw new BusinessException("API-001");
+        }
+
         repository.deleteById(id);
     }
 }
