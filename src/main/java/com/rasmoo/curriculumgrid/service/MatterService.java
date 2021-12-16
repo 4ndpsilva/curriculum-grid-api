@@ -1,48 +1,39 @@
 package com.rasmoo.curriculumgrid.service;
 
 import com.rasmoo.curriculumgrid.entity.Matter;
-import com.rasmoo.curriculumgrid.exception.BusinessException;
-import com.rasmoo.curriculumgrid.exception.ResourceNotFoundException;
 import com.rasmoo.curriculumgrid.repository.MatterRepository;
-import lombok.RequiredArgsConstructor;
+import com.rasmoo.curriculumgrid.repository.spec.CommonSpec;
+import com.rasmoo.curriculumgrid.service.core.AbstractCrudService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
-@RequiredArgsConstructor
 @Service
-public class MatterService implements CrudService<Matter, Long>{
-    private final MatterRepository repository;
+public class MatterService extends AbstractCrudService<Matter, Long> {
+    private CommonSpec<Matter> commonSpec;
 
-    public Matter save(final Matter entity){
-        return repository.save(entity);
+    @Autowired
+    public MatterService(final MatterRepository repository, CommonSpec<Matter> commonSpec) {
+        super(repository, Matter.class, commonSpec);
+        this.commonSpec = commonSpec;
     }
 
-    public Matter update(final Long id, final Matter entity){
-        entity.setId(id);
-        return repository.save(entity);
-    }
+    @Override
+    public void validate() {}
 
-    public Matter findById(final Long id){
-        Optional<Matter> opMatter = repository.findById(id);
+    @Override
+    public Specification<Matter> createFilter(final Map<String, Object> params) {
+        Specification<Matter> spec = Specification.where(null);
 
-        if(opMatter.isPresent()){
-            return opMatter.get();
+        if(params.get("code") != null && !params.get("code").toString().isBlank()){
+            spec = spec.and(commonSpec.equal("code", params.get("code")));
+        }
+        if(params.get("name") != null && !params.get("name").toString().isBlank()){
+            spec = spec.and(commonSpec.like("name", params.get("name")));
         }
 
-        throw new ResourceNotFoundException("API-001");
-    }
-
-    public List<Matter> findAll(){
-        return repository.findAll();
-    }
-
-    public void delete(final Long id){
-        if(!repository.existsById(id)){
-            throw new ResourceNotFoundException("API-001");
-        }
-
-        repository.deleteById(id);
+        return spec;
     }
 }

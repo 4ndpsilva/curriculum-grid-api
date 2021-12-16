@@ -24,7 +24,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<List<ErrorResponseDTO>> handleBusinessException(ResourceNotFoundException ex){
+    public ResponseEntity<List<ErrorResponseDTO>> handleResourceNotFoundException(ResourceNotFoundException ex){
         return responseMessageCreator.error(ex.getCodeMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<List<ErrorResponseDTO>> handleBusinessException(BusinessException ex){
+        return responseMessageCreator.error(ex.getCodeMessage(), HttpStatus.BAD_REQUEST);
     }
 }

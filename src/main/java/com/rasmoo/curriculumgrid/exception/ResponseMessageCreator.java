@@ -25,11 +25,12 @@ public class ResponseMessageCreator{
     }
 
     public List<ErrorResponseDTO> getErrors(final BindingResult bindingResult) {
-        final ErrorResponseDTO error = buildErrorResponse("API-003", HttpStatus.BAD_REQUEST);
-
         final List<ValidationErrorDTO> errors = new ArrayList<>();
         bindingResult.getFieldErrors().forEach(f -> errors.add(new ValidationErrorDTO(f.getField(), f.getDefaultMessage())));
+
+        final ErrorResponseDTO error = buildErrorResponse("API-003", HttpStatus.BAD_REQUEST);
         error.setValidationErrors(errors);
+
         return List.of(error);
     }
 

@@ -1,7 +1,6 @@
 package com.rasmoo.curriculumgrid.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.rasmoo.curriculumgrid.entity.Matter;
+import com.rasmoo.curriculumgrid.repository.core.BaseRepository;
 
-public interface MatterRepository extends JpaRepository<Matter, Long>{}
+public interface MatterRepository extends BaseRepository<Matter, Long> {}
