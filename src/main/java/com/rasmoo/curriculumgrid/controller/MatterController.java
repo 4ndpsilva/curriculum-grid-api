@@ -2,7 +2,7 @@ package com.rasmoo.curriculumgrid.controller;
 
 import com.rasmoo.curriculumgrid.dto.MatterDTO;
 import com.rasmoo.curriculumgrid.entity.Matter;
-import com.rasmoo.curriculumgrid.mapper.MatterMapper;
+import com.rasmoo.curriculumgrid.mapper.GenericMapper;
 import com.rasmoo.curriculumgrid.service.core.AbstractCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,16 +26,16 @@ import java.util.Map;
 @RequestMapping("/matters")
 public class MatterController {
 	private final AbstractCrudService<Matter, Long> service;
-	private final MatterMapper mapper;
+	private final GenericMapper<Matter, MatterDTO> mapper;
 
 	@PostMapping
 	public ResponseEntity<MatterDTO> save(@RequestBody @Valid final MatterDTO dto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(service.save(mapper.map(dto))));
+		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(service.save(mapper.mapToEntity(dto))));
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<MatterDTO> update(@PathVariable final Long id, @RequestBody @Valid final MatterDTO dto) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(service.update(id, mapper.map(dto))));
+		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(service.update(id, mapper.mapToEntity(dto))));
 	}
 
 	@DeleteMapping("/{id}")
@@ -46,11 +46,11 @@ public class MatterController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<MatterDTO> findById(@PathVariable final Long id) {
-		return ResponseEntity.status(HttpStatus.OK).body(mapper.map(service.findById(id)));
+		return ResponseEntity.status(HttpStatus.OK).body(mapper.mapToDTO(service.findById(id)));
 	}
 
 	@GetMapping
 	public ResponseEntity<List<MatterDTO>> list(@RequestParam final Map<String, Object> params) {
-		return ResponseEntity.status(HttpStatus.OK).body(mapper.map(service.find(params)));
+		return ResponseEntity.status(HttpStatus.OK).body(mapper.mapToListDTO(service.find(params)));
 	}
 }

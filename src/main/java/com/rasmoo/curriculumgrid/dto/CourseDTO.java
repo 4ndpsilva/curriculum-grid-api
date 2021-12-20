@@ -8,17 +8,10 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class MatterDTO {
+public class CourseDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotBlank
-    private String code;
-
-    @NotBlank
     private String name;
-
-    private int hours;
-
-    private int frequency;
 }

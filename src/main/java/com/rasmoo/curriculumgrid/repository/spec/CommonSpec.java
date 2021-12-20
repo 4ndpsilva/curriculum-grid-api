@@ -33,7 +33,7 @@ public class CommonSpec<T> {
         return (root, criteriaQuery, cb) -> cb.between(root.get(field), startValue, endValue);
     }
 
-    public Specification<T> in(String field, List<T> values){
+    public Specification<T> in(String field, List<?> values){
         return (root, criteriaQuery, cb) -> cb.in(root.get(field)).value(values);
     }
 }
