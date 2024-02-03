@@ -18,8 +18,7 @@ import java.util.List;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private final ResponseMessageCreator responseMessageCreator;
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return handleExceptionInternal(ex, responseMessageCreator.getErrors(ex.getBindingResult()), headers, HttpStatus.BAD_REQUEST, request);
     }
 
