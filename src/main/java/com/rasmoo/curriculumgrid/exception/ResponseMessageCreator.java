@@ -1,7 +1,7 @@
 package com.rasmoo.curriculumgrid.exception;
 
 import com.rasmoo.curriculumgrid.dto.ErrorResponseDTO;
-import com.rasmoo.curriculumgrid.dto.ValidationErrorDTO;
+import com.rasmoo.curriculumgrid.dto.ErrorDetailsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -25,11 +25,11 @@ public class ResponseMessageCreator{
     }
 
     public List<ErrorResponseDTO> getErrors(final BindingResult bindingResult) {
-        final List<ValidationErrorDTO> errors = new ArrayList<>();
-        bindingResult.getFieldErrors().forEach(f -> errors.add(new ValidationErrorDTO(f.getField(), f.getDefaultMessage())));
+        final List<ErrorDetailsDTO> errors = new ArrayList<>();
+        bindingResult.getFieldErrors().forEach(f -> errors.add(new ErrorDetailsDTO(f.getField(), f.getDefaultMessage())));
 
         final ErrorResponseDTO error = buildErrorResponse("API-006", HttpStatus.BAD_REQUEST);
-        error.setValidationErrors(errors);
+        error.setErrorDetails(errors);
 
         return List.of(error);
     }

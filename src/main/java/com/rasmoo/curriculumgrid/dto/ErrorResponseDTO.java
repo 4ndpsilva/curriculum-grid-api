@@ -13,7 +13,7 @@ public class ErrorResponseDTO {
     private String code;
     private String message;
     private Integer statusCode;
-    private List<ValidationErrorDTO> validationErrors;
+    private List<ErrorDetailsDTO> errorDetails;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timestamp;
